@@ -1,0 +1,90 @@
+{% extends 'base_.html' %}
+{% load static %}
+{% block css %}
+  <link rel="stylesheet" href="{% static 'assets/vendors/simple-datatables/style.css' %}" />
+  <link rel="stylesheet" crossorigin href="{% static 'assets/css/table-datatable.css' %}" />
+{% endblock %}
+
+{% block content %}
+  <div class="page-heading">
+    <div class="page-title">
+      <div class="row">
+        <div class="col-12 col-md-6 order-md-1 order-last">
+          <h3>Absah</h3>
+          <p class="text-subtitle text-muted">Data Aset BWS Papua Barat</p>
+        </div>
+
+        <div class="col-12 col-md-6 order-md-2 order-first">
+          <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="{% url 'home' %}">Dashboard</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">Index</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="card">
+        <div class="card-header">
+          <a href="{% url 'absah:create' %}" class="btn icon icon-left btn-primary"><i data-feather="plus"></i> Tambah Data</a>
+        </div>
+        <div class="card-body">
+          <table class="table table-striped" id="table1">
+            <thead>
+              <tr>
+                <th class="text-center">No</th>
+                <th class="text-center">Nama Tanggul</th>
+                <th class="text-center">Kabupaten</th>
+                <th class="text-center">Volume</th>
+                <th class="text-center">Dokumentasi</th>
+                <th class="text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for obj in objects %}
+                <tr>
+                  <td class="text-center">{{ forloop.counter }}.</td>
+                  <td>{{ obj.nama }}</td>
+                  <td>{{ obj.kabupaten }}</td>
+                  <td>{{ obj.volume }}</td>
+                  <td>
+                    {% with foto=obj.get_thumbnail %}
+                      {% if foto %}
+                        <div class="d-flex flex-column justify-content-center align-items-center gap-2">
+                          <img src="{{ foto.image.url }}" width="100" style="border-radius:10px ;" />
+                          {% comment %} <a href="{{ foto.image.ur }}" target="_blank" class="btn btn-sm btn-outline-info border-0"><i class="bi bi-cloud-download-fill"></i></a> {% endcomment %}
+                        </div>
+                      {% endif %}
+                    {% endwith %}
+                  </td>
+                  <td class="d-flex w-auto justify-content-center h-auto align-items-center">
+                    <a href="{% url 'absah:detail' obj.pk %}" class="btn icon btn-outline-info btn-sm border-0"><i class="bi bi-eye"></i></a>
+                    <a href="{% url 'absah:update' obj.pk %}" class="btn icon btn-outline-warning btn-sm border-0"><i class="bi bi-pencil"></i></a>
+                    <form action="{% url 'absah:delete' obj.pk %}" method="post">
+                      {% csrf_token %}
+                      <button type="submit" class="btn icon btn-outline-danger border-0 btn-sm"><i class="bi bi-trash"></i></button>
+                    </form>
+                    {% with foto=obj.get_thumbnail %}
+                      {% if foto %}
+                        <a href="{% url 'absah:download' foto.pk %}" target="_blank" class="btn btn-sm btn-outline-info border-0"><i class="bi bi-cloud-download-fill"></i></a>
+                      {% endif %}
+                    {% endwith %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+{% endblock %}
+
+{% block js %}
+  <script src="{% static 'assets/vendors/simple-datatables/umd/simple-datatables.js' %}"></script>
+  <script src="{% static 'assets/js/pages/simple-datatables.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,13 @@
+[project]
+name = "si-aset-bwspb"
+version = "0.1.0"
+description = "Aplikasi Invetaris Aset"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "django==5.0.14",
+    "openpyxl>=3.1.5",
+    "pandas>=3.0.2",
+    "pillow>=12.2.0",
+    "pymysql==1.1.2",
+]
