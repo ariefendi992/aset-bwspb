@@ -15,7 +15,11 @@ import pandas as pd
 def index_bendung(request):
 
     obj = BendungModel.objects.all().prefetch_related("dokumentasi")
-    context = {"filename": "bendung", "objects": obj}
+    context = {
+        "filename": "bendung",
+        "objects": obj,
+        "form": UploadExcelForm,
+    }
     return render(request, "index_bendung.html", context)
 
 
@@ -222,27 +226,29 @@ def import_excel(request: HttpRequest):
 
                     data_excel = dict(
                         nama=nama,
-                        provinsi=str(row["provinsi"]),
-                        kabupaten=str(row["kabupaten"]),
-                        kecamatan=str(row["kecamatan"]),
-                        desa=str(row["desa"]),
-                        sungai=str(row["sungai"]),
-                        jenis_bendung=row["jenis_bendung"],
-                        tinggi=row["tinggi"],
-                        lebar=row["lebar"],
-                        debit_intake_musim_hujan=row["debit_intake_musim_hujan"],
-                        debit_intake_musim_kemarau=row["debit_intake_musim_kemarau"],
-                        tahun_mulai=row["tahun_mulai"],
-                        tahun_rehab=row["tahun_rehab"],
-                        kondisi=str(row["kondisi"]),
-                        irigasi=row["irigasi"],
-                        lain_lain=str(row["lain_lain"]),
-                        latitude1=row["latitude1"],
-                        longitude1=row["longitude1"],
-                        latitude2=row["latitude2"],
-                        longitude2=row["longitude2"],
-                        status_aset=str(row["status_aset"]),
-                        penamaan_bmn=str(row["penamaan_bmn"]),
+                        provinsi=str(row["provinsi"]) or None,
+                        kabupaten=str(row["kabupaten"]) or None,
+                        kecamatan=str(row["kecamatan"]) or None,
+                        desa=str(row["desa"]) or None,
+                        sungai=str(row["sungai"]) or None,
+                        jenis_bendung=row["jenis_bendung"] or None,
+                        tinggi=row["tinggi"] or None,
+                        lebar=row["lebar"] or None,
+                        debit_intake_musim_hujan=row["debit_intake_musim_hujan"]
+                        or None,
+                        debit_intake_musim_kemarau=row["debit_intake_musim_kemarau"]
+                        or None,
+                        tahun_mulai=row["tahun_mulai"] or None,
+                        tahun_rehab=row["tahun_rehab"] or None,
+                        kondisi=str(row["kondisi"]) or None,
+                        irigasi=row["irigasi"] or None,
+                        lain_lain=str(row["lain_lain"]) or None,
+                        latitude1=row["latitude1"] or None,
+                        longitude1=row["longitude1"] or None,
+                        latitude2=row["latitude2"] or None,
+                        longitude2=row["longitude2"] or None,
+                        status_aset=str(row["status_aset"]) or None,
+                        penamaan_bmn=str(row["penamaan_bmn"]) or None,
                     )
 
                     if obj:
@@ -273,6 +279,7 @@ def import_excel(request: HttpRequest):
             except Exception as e:
                 messages.error(request, f"Error: {str(e)}")
                 # return redirect("bendung:index_bendung")
+                raise e
             return redirect("bendung:index")
     else:
         form = UploadExcelForm()

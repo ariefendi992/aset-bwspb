@@ -3,5 +3,13 @@
   "[django-html]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "junstyle.vscode-django-support"
+  },
+  "[html]": {
+    "editor.suggest.insertMode": "replace",
+    "editor.hover.above": false,
+    "editor.hover.enabled": "off",
+    "editor.hover.delay":100,
+    "editor.hover.sticky": false,
+    "editor.parameterHints.enabled": false
   }
 }
