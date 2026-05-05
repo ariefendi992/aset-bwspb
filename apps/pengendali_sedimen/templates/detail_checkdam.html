@@ -59,13 +59,23 @@
                     <td>{{ object.provinsi|default:'-' }}</td>
                   </tr>
                   <tr>
-                    <td>Koordinat</td>
-                    <td>{{ object.latitude }}, {{ object.longitude }}</td>
+                    <td>Koordinat Awal</td>
+                    <td>
+                      {{ object.latitude }}, {{ object.longitude }}
+                      <input id="koordinatAwal" type="text" hidden value="{{ object.latitude }}, {{ object.longitude }}" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Koordinat Akhir</td>
+                    <td>
+                      {{ object.latitude2|default:'-' }}, {{ object.longitude2|default:'-' }}
+                      <input id="koordinatAkhir" type="text" hidden value="{{ object.latitude2|default:'' }}, {{ object.longitude2|default:'' }}" />
+                    </td>
                   </tr>
                 </table>
               </div>
               {% comment %}MAP{% endcomment %}
-              <div id="map" style="height: 400px;"></div>
+              <div id="map"></div>
             </div>
           </div>
 
@@ -225,32 +235,56 @@
 {% endblock %}
 
 {% block js %}
-  <script>
-    let lati = parseFloat('{{ object.latitude }}')
-    let longi = parseFloat('{{ object.longitude }}')
-    console.log(`Lati ===  ${lati}`)
-    async function initMap() {
-      const { Map } = await google.maps.importLibrary('maps')
-      const { AdvancedMarkerElement } = await google.maps.importLibrary('marker')
-    
-      const posisi = {
-        lat: lati,
-        lng: longi
-      }
-    
-      const map = new Map(document.getElementById('map'), {
-        zoom: 12,
-        center: posisi,
-        mapId: 'ID' // WAJIB
-      })
-    
-      new AdvancedMarkerElement({
-        map: map,
-        position: posisi,
-        title: '{{ object.nama }}'
-      })
-    }
-  </script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJVJyY0mths9inBpJ4ZAueiNkWvXHaAMk&libraries=marker&callback=initMap" async defer></script>
+  <script>
+    const koordinatAwal = document.getElementById('koordinatAwal').value.split(',')
+    const valuerAkhir = document.getElementById('koordinatAkhir').value
+    const koordinatAkhir = valuerAkhir ? valuerAkhir.split(',') : null
+    
+    //console.log(`Koordinat Awal ==> ${koordinatAwal} dan Koordinat Akhir ==> ${koordinatAkhir}`)
+    //console.log(Array.isArray(koordinatAkhir))
+    
+    function initMap() {
+      const map = L.map('map').setView(koordinatAwal, 9)
+    
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map)
+    
+      // 🔵 Icon hijau (awal)
+      const greenIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+        shadowUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41]
+      })
+    
+      // 🔴 Icon merah (akhir)
+      const redIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+        shadowUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41]
+      })
+    
+      // Marker Awal
+      L.marker(koordinatAwal, {
+        icon: greenIcon
+      })
+        .addTo(map)
+        .bindPopup('Koordinat Awal')
+    
+      // Marker Akhir
+      if (koordinatAkhir && koordinatAkhir.length === 2 && koordinatAkhir[0] != '' && koordinatAkhir[1] != '') {
+        L.marker(koordinatAkhir, {
+          icon: redIcon
+        })
+          .addTo(map)
+          .bindPopup('Koordinat Akhir')
+      }
+    }
+    
+    initMap()
+  </script>
 {% endblock %}

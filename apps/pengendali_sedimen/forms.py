@@ -62,3 +62,17 @@ class FotoCheckDamForm(forms.ModelForm):
 #     extra=1,
 #     can_delete=True,
 # )
+class UploadExcelForm(forms.Form):
+    file = forms.FileField(
+        label="Pilih File",
+        widget=forms.ClearableFileInput(
+            attrs={"class": "form-control", "accept": ".xlsx"}
+        ),
+    )
+
+    def cleaned_file(self):
+        file = self.cleaned_data["file"]
+
+        if not file.name.endswith(".xlsx"):
+            raise forms.ValidationError("File harus format .xlsx")
+        return file
