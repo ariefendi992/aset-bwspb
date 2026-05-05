@@ -278,8 +278,7 @@ def import_excel(request: HttpRequest):
 
             except Exception as e:
                 messages.error(request, f"Error: {str(e)}")
-                # return redirect("bendung:index_bendung")
-                raise e
+                # raise e
             return redirect("bendung:index")
     else:
         form = UploadExcelForm()
