@@ -10,4 +10,5 @@ urlpatterns = [
     path(r"delete-data/<int:id>/", views.delete_data, name="delete"),
     path(r"detail-data/<int:id>/", views.detail_bendung, name="detail"),
     path(r"template/download/", views.export_template, name="template"),
+    path(r"template/import-excel/", views.import_excel, name="import"),
 ]

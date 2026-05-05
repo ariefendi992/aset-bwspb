@@ -193,3 +193,89 @@ def export_template(request: HttpRequest):
 
     wb.save(response)
     return response
+
+
+@login_required(login_url="akun:login")
+def import_excel(request: HttpRequest):
+    if request.method == "POST":
+        form = UploadExcelForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            file = request.FILES["file"]
+            try:
+                df = pd.read_excel(file)
+                df.columns = df.columns.str.strip().str.lower()
+                df = df.fillna("")
+
+                inserted = 0
+                skipped = 0
+                updated = 0
+
+                for _, row in df.iterrows():
+
+                    nama = str(row["nama"])
+
+                    if not nama:
+                        continue
+
+                    obj = BendungModel.objects.filter(nama=nama).first()
+
+                    data_excel = dict(
+                        nama=nama,
+                        provinsi=str(row["provinsi"]),
+                        kabupaten=str(row["kabupaten"]),
+                        kecamatan=str(row["kecamatan"]),
+                        desa=str(row["desa"]),
+                        sungai=str(row["sungai"]),
+                        jenis_bendung=row["jenis_bendung"],
+                        tinggi=row["tinggi"],
+                        lebar=row["lebar"],
+                        debit_intake_musim_hujan=row["debit_intake_musim_hujan"],
+                        debit_intake_musim_kemarau=row["debit_intake_musim_kemarau"],
+                        tahun_mulai=row["tahun_mulai"],
+                        tahun_rehab=row["tahun_rehab"],
+                        kondisi=str(row["kondisi"]),
+                        irigasi=row["irigasi"],
+                        lain_lain=str(row["lain_lain"]),
+                        latitude1=row["latitude1"],
+                        longitude1=row["longitude1"],
+                        latitude2=row["latitude2"],
+                        longitude2=row["longitude2"],
+                        status_aset=str(row["status_aset"]),
+                        penamaan_bmn=str(row["penamaan_bmn"]),
+                    )
+
+                    if obj:
+                        is_changed = False
+                        for field, value in data_excel.items():
+                            if getattr(obj, field) != value:
+                                is_changed = True
+                                setattr(obj, field, value)
+                        if is_changed:
+                            obj.updated_by = request.user
+                            obj.save()
+                            updated += 1
+                        else:
+                            skipped += 1
+                    else:
+                        BendungModel.objects.create(
+                            created_by=request.user,
+                            updated_by=request.user,
+                            **data_excel,
+                        )
+                        inserted += 1
+                messages.success(
+                    request,
+                    f"Import selesai. {inserted} data baru, {updated} data diperbaharui, {skipped} data tidak berubah.",
+                )
+                return redirect("bendung:index")
+
+            except Exception as e:
+                messages.error(request, f"Error: {str(e)}")
+                # return redirect("bendung:index_bendung")
+            return redirect("bendung:index")
+    else:
+        form = UploadExcelForm()
+
+    context = {"filename": "bendung", "form": form}
+    return render(request, "index_bendung.html", context)

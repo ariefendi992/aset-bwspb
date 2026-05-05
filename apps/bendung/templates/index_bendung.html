@@ -31,6 +31,7 @@
       <div class="card">
         <div class="card-header">
           <a href="{% url 'bendung:add' %}" class="btn icon icon-left btn-primary"><i data-feather="plus"></i> Tambah Data</a>
+          <a class="btn btn-info icon icon-left" data-bs-toggle="modal" data-bs-target="#modalUploadFile"><i data-feather="upload"></i> Import Data</a>
           <a href="{% url 'bendung:template' %}" class="btn icon icon-left btn-warning"><i data-feather="download"></i> Unduh Template</a>
         </div>
         <div class="card-body">
@@ -90,7 +91,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
               </div>
 
-              <form action="" method="post" enctype="multipart/form-data" class="form form-horizontal">
+              <form action="{% url 'bendung:import' %}" method="post" enctype="multipart/form-data" class="form form-horizontal">
                 <div class="modal-body text-center">
                   {% csrf_token %}
                   <div class="form-body">
