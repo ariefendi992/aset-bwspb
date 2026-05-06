@@ -244,12 +244,12 @@ def import_excel(request: HttpRequest):
             except Exception as e:
                 # print(str(e))
                 messages.error(request, f"Error: {str(e)}")
-                raise e
+                # raise e
 
             return redirect("embung:index")
     else:
         form = UploadExcelForm()
 
-    context = {"filenam": "embung", "form": form}
+    context = {"filename": "embung", "form": form}
 
     return render(request, "index_danau.html", context)
