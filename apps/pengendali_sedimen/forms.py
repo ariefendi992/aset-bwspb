@@ -13,6 +13,7 @@ class CheckDamForm(forms.ModelForm):
             "latitude2": "lat2",
             "longitude2": "long2",
         }
+        exclude = ["created_by", "updated_by"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
