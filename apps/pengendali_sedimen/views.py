@@ -222,8 +222,9 @@ def import_template(request: HttpRequest):
                     if obj:
                         is_changed = False
                         for field, value in data_excel.items():
-                            is_changed = True
-                            setattr(obj, field, value)
+                            if getattr(obj, field) != value:
+                                is_changed = True
+                                setattr(obj, field, value)
 
                         if is_changed:
                             obj.updated_by = request.user
@@ -248,7 +249,7 @@ def import_template(request: HttpRequest):
             except Exception as e:
                 messages.error(request, f"Error: {str(e)}")
 
-                raise e
+                # raise e
 
             return redirect("checkdam:index")
 
