@@ -6,6 +6,7 @@ class EmbungForms(forms.ModelForm):
     class Meta:
         model = EmbungModel
         fields = "__all__"
+        exclude = ["created_by", "updated_by"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
