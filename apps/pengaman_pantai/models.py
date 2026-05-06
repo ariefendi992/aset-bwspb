@@ -11,8 +11,8 @@ class PengamanPantaiModel(BaseAssetModel):
         ("Seawall", "Seawall"),
         ("Pasangan Batu", "Pasangan Batu"),
         ("Tanggul Laut", "Tanggul Laut"),
-        ("Revetman", "Revetman"),
-        ("Revetman", "Revetman"),
+        # ("Revetman", "Revetman"),
+        # ("Revetman", "Revetman"),
     ]
     kewenangan = models.CharField(max_length=100, null=True, blank=True)
     jenis_bangunan = models.CharField(max_length=100, choices=JENIS_BANGUNAN_CHOICE)

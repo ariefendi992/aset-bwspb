@@ -30,6 +30,8 @@
       <div class="card">
         <div class="card-header">
           <a href="{% url 'ppantai:create' %}" class="btn icon icon-left btn-primary"><i data-feather="plus"></i> Tambah Data</a>
+          <a class="btn btn-info icon icon-left" data-bs-toggle="modal" data-bs-target="#modalUploadFile"><i data-feather="upload"></i> Import Data</a>
+          <a href="{% url 'ppantai:template' %}" class="btn icon icon-left btn-warning"><i data-feather="download"></i> Unduh Template</a>
         </div>
         <div class="card-body">
           <table class="table table-striped" id="table1">
@@ -38,7 +40,8 @@
                 <th class="text-center">No</th>
                 <th class="text-center">Nama</th>
                 <th class="text-center">Kabupaten</th>
-                <th class="text-center">Kel/Desa</th>
+                <th class="text-center">Panjang</th>
+                <th class="text-center">Lebar</th>
                 <th class="text-center">Jenis Bangunan</th>
                 <th class="text-center">Aksi</th>
               </tr>
@@ -50,15 +53,28 @@
                   <td class="text-center">{{ forloop.counter }}</td>
                   <td>{{ obj.nama }}</td>
                   <td>{{ obj.kabupaten }}</td>
-                  <td>{{ obj.desa }}</td>
+                  <td>{{ obj.panjang }}</td>
+                  <td>{{ obj.lebar_puncak }}</td>
                   <td>{{ obj.jenis_bangunan }}</td>
                   <td class="text-center">
-                    <a href="{% url 'ppantai:detail' obj.pk %}" class="btn icon btn-outline-info btn-sm border-0"><i class="bi bi-eye"></i></a>
-                    <a href="{% url 'ppantai:edit' obj.pk %}" class="btn icon btn-outline-warning btn-sm border-0"><i class="bi bi-pencil"></i></a>
-                    <form action="{% url 'ppantai:delete' obj.pk %}" method="post">
-                      {% csrf_token %}
-                      <button type="submit" class="btn icon btn-outline-danger border-0 btn-sm"><i class="bi bi-trash"></i></button>
-                    </form>
+                    <button class="btn btn-sm btn-light border-0" type="button" data-bs-toggle="dropdown"><i class="bi bi-three-dots-vertical"></i></button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                      <li>
+                        <a href="{% url 'ppantai:detail' obj.pk %}" class="dropdown-item"><i class="bi bi-eye text-info"></i> Detail</a>
+                      </li>
+                      <li>
+                        <a href="{% url 'ppantai:edit' obj.pk %}" class="dropdown-item"><i class="bi bi-pencil text-warning"></i> Edit</a>
+                      </li>
+                      <li>
+                        <hr class="dropdown-divider" />
+                      </li>
+                      <li>
+                        <form action="{% url 'ppantai:delete' obj.pk %}" method="post">
+                          {% csrf_token %}
+                          <button type="submit" class="dropdown-item text-danger"><i class="bi bi-trash"></i> Delete</button>
+                        </form>
+                      </li>
+                    </ul>
                     {% comment %} {% with foto=obj.get_thumbnail %}
                       {% if foto %}
                         <a href="{% url 'checkdam:download' foto.pk %}" target="_blank" class="btn btn-sm btn-outline-info border-0"><i class="bi bi-cloud-download-fill"></i></a>
@@ -69,6 +85,40 @@
               {% endfor %}
             </tbody>
           </table>
+        </div>
+
+        <div class="modal fade" id="modalUploadFile" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Tambah data dengan file excel</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+
+              <form action="{% url 'ppantai:import' %}" method="post" enctype="multipart/form-data" class="form form-horizontal">
+                <div class="modal-body text-center">
+                  {% csrf_token %}
+                  <div class="form-body">
+                    <div class="row">
+                      {% for field in form %}
+                        <div class="col-md-4">{{ field.label }}</div>
+                        <div class="col-md-8 form-group">
+                          {{ field }}
+                          {% comment %} {% if field.errors %}
+                            <div class="invalid-feedback">{{ field.errors|striptags }}</div>
+                          {% endif %} {% endcomment %}
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                  <button type="submit" class="btn btn-success icon icon-left me-1"><i data-feather="check-circle"></i> Import</button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </section>

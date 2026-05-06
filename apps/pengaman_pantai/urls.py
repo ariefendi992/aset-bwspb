@@ -8,4 +8,6 @@ urlpatterns = [
     path("detail/<int:obj_id>/", views.detail, name="detail"),
     path("edit/<int:obj_id>/", views.update, name="edit"),
     path("delete/<int:obj_id>/", views.delete, name="delete"),
+    path("template/downlad", views.export_template, name="template"),
+    path("template/import", views.import_template, name="import"),
 ]
