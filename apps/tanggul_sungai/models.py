@@ -25,7 +25,8 @@ class TanggulSungaiModel(BaseAssetModel):
         null=True,
         blank=True,
         choices=[
-            ("Talud Pasang Batu", "Talud Pasang Batu"),
+            ("Talud, Pasang Batu", "Talud, Pasang Batu"),
+            ("Talud, Pasang Batu & Bronjong", "Talud, Pasang Batu & Bronjong"),
             ("Pasang Batu", "Pasang Batu"),
             ("Bronjong", "Bronjong"),
         ],

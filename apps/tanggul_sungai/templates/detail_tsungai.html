@@ -59,7 +59,7 @@
                   <tr>
                     <td>Koordinat Akhir</td>
                     <td>
-                      {{ object.latitude2 }}, {{ object.longitude2 }}
+                      {{ object.latitude2|default:'-' }}, {{ object.longitude2|default:'-' }}
                       <input id="koordinatAkhir" type="text" hidden value="{{ object.latitude2 }}, {{ object.longitude2 }}" />
                     </td>
                   </tr>
@@ -191,20 +191,11 @@
 
 {% block js %}
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
   <script>
     const koordinatAwal = document.getElementById('koordinatAwal').value.split(',')
-    const koordinatAkhir = document.getElementById('koordinatAkhir').value.split(',')
-    
-    //const latitude1 = parseFloat(koordinatAwal.value.split(',')[0])
-    //const longitude1 = parseFloat(koordinatAwal.value.split(',')[1])
-    
-    //const latitude2 = parseFloat(koordinatAkhir.value.split(',')[0])
-    //const longitude2 = parseFloat(koordinatAkhir.value.split(',')[1])
-    
-    //console.log(`latitude1 ==> ${latitude1}`)
-    //console.log(`longitude1 ==> ${longitude1}`)
-    //console.log(`latitude2 ==> ${latitude2}`)
-    //console.log(`longitude2 ==> ${longitude2}`)
+    const valuerAkhir = document.getElementById('koordinatAkhir').value
+    const koordinatAkhir = valuerAkhir ? valuerAkhir.split(',') : null
     
     //console.log(`Koordinat Awal ==> ${koordinatAwal} dan Koordinat Akhir ==> ${koordinatAkhir}`)
     //console.log(Array.isArray(koordinatAkhir))
@@ -240,33 +231,15 @@
         .bindPopup('Koordinat Awal')
     
       // Marker Akhir
-      L.marker(koordinatAkhir, {
-        icon: redIcon
-      })
-        .addTo(map)
-        .bindPopup('Koordinat Akhir')
+      if (koordinatAkhir && koordinatAkhir.length === 2 && koordinatAkhir[0] != '' && koordinatAkhir[1] != '') {
+        L.marker(koordinatAkhir, {
+          icon: redIcon
+        })
+          .addTo(map)
+          .bindPopup('Koordinat Akhir')
+      }
     }
     
     initMap()
-    
-    //let lati = parseFloat('{{ object.latitude }}')
-    //let longi = parseFloat('{{ object.longitude }}')
-    
-    //function initMap() {
-    //const posisi = [lati, longi]
-    
-    // Inisialisasi map
-    //const map = L.map('map').setView(posisi, 13)
-    
-    // Tile layer (peta dasar)
-    //L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    //  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    //}).addTo(map)
-    
-    // Marker
-    //L.marker(posisi).addTo(map).bindPopup('{{ object.nama }}').openPopup()
-    //}
-    
-    //initMap()
   </script>
 {% endblock %}
