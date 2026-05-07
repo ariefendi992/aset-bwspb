@@ -9,6 +9,6 @@ urlpatterns = [
     path("edit/<int:obj_id>/", views.update, name="edit"),
     path("delete/<int:obj_id>/", views.delete, name="delete"),
     path("download-foto/<int:foto_id>/", views.download_foto, name="download"),
-    path("template/downlad", views.export_template, name="template"),
+    path("template/download", views.export_template, name="template"),
     path("template/import", views.import_template, name="import"),
 ]
