@@ -5,8 +5,10 @@ app_name = "absah"
 urlpatterns = [
     path("", views.index, name="index"),
     path("add/", views.create, name="create"),
-    path("edit/<int:id>/", views.update, name="update"),
+    path("edit/<int:id>/", views.update, name="edit"),
     path("detail/<int:id>/", views.detail, name="detail"),
     path("delete/<int:id>/", views.delete, name="delete"),
     path("download-file/<int:id>/", views.download_foto, name="download"),
+    path("template/download", views.export_template, name="template"),
+    path("template/import", views.import_template, name="import"),
 ]
