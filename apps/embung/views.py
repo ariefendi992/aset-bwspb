@@ -170,6 +170,7 @@ def export_template(request):
     return repsonse
 
 
+@login_required(login_url="akun:login")
 def import_excel(request: HttpRequest):
     if request.method == "POST":
         form = UploadExcelForm(request.POST, request.FILES)
