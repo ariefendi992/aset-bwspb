@@ -86,13 +86,21 @@ class SatkerModel(models.Model):
 
 class UserModel(AbstractUser):
     role = [
+        ("", "-- Pilih --"),
         ("ppk", "PPK"),
         ("staff_ppk", "Staff PPK"),
         ("staff_satker", "Staff Satker"),
     ]
 
-    role = models.CharField("Role", max_length=30, choices=role, blank=True, null=True)
-    ppk = models.ForeignKey(PPKModel, on_delete=models.SET_NULL, null=True, blank=True)
+    role = models.CharField(
+        "Role", max_length=30, choices=role, blank=True, null=True, default=""
+    )
+    ppk = models.ForeignKey(
+        PPKModel,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
     satker = models.ForeignKey(
         SatkerModel, on_delete=models.SET_NULL, null=True, blank=True
     )
@@ -104,10 +112,10 @@ class UserModel(AbstractUser):
         return f"{self.username}"
 
     @property
-    def fullname(self):
+    def nama(self):
         return f"{self.first_name} {self.last_name}"
 
     class Meta:
         db_table = "tb_user"
-        verbose_name = "Users"
-        verbose_name_plural = "Users"
+        verbose_name = "Pengguna"
+        verbose_name_plural = "Data Pengguna"
