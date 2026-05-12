@@ -34,6 +34,7 @@ def login_view(request: HttpRequest):
     return render(request, "login.html")
 
 
+@login_required
 def logout_user(request: HttpRequest):
     logout(request)
     messages.success(request, "Anda telah keluar dari sistem.")

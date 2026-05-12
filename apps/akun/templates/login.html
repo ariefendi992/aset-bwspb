@@ -61,4 +61,31 @@
       </div>
     </div>
   </body>
+
+  <script src="{% static 'assets/vendors/sweetalert2/sweetalert2.min.js' %}"></script>
+  {% if messages %}
+    {% comment %} <script src="{% static 'assets/js/pages/sweetalert2.js' %}"></script> {% endcomment %}
+    {% for message in messages %}
+      <script>
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+        })
+        
+        document.addEventListener('DOMContentLoaded', function () {
+          Toast.fire({
+            icon: '{{ message.tags }}',
+            title: '{{ message }}'
+          })
+        })
+      </script>
+    {% endfor %}
+  {% endif %}
 </html>

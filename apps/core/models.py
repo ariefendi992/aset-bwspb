@@ -119,8 +119,7 @@ class ActivityLogModel(models.Model):
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
     action = models.CharField(max_length=16, choices=ACTION_CHOICES)
     model_name = models.CharField(max_length=100)
-    # data_name = models.CharField(max_length=120)
-    object_id = models.IntegerField()
+    object_id = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 

@@ -109,8 +109,15 @@
 
         <li class="sidebar-item">
           <a href="" class="sidebar-link">
-            <i class="bi bi-person-circle"></i>
+            <i class="bi bi-person-fill"></i>
             <span>Manajemen Akun</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a href="{% url 'akun:logout' %}" class="sidebar-link">
+            <i class="bi bi-door-open-fill"></i>
+            <span>Keluar</span>
           </a>
         </li>
         {% comment %} <li class="sidebar-item">
