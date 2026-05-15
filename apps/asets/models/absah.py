@@ -27,8 +27,8 @@ class DataAbsahModel(BaseAssetModel):
 
     class Meta:
         db_table = "tb_data_absah"
-        verbose_name = "Data Absah"
-        verbose_name_plural = "Data Absah"
+        verbose_name = "Absah"
+        verbose_name_plural = "Absah"
 
 
 class FotoDataAbsahModel(BaseFotoModel):
