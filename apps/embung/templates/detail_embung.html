@@ -1,4 +1,5 @@
 {% extends 'base_.html' %}
+{% load l10n %}
 {% load static %}
 {% block css %}
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -58,7 +59,7 @@
                   </tr>
                   <tr>
                     <td>Koordinat</td>
-                    <td>{{ object.latitude }}, {{ object.longitude }}</td>
+                    <td>{{ object.latitude|unlocalize }}, {{ object.longitude|unlocalize }}</td>
                   </tr>
                 </table>
               </div>
@@ -166,16 +167,19 @@
 {% block js %}
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script>
-    const koordinatAwal = '{{ object.latitude }},{{ object.longitude }}'.split(',')
+    const koordinat = ['{{ object.latitude|unlocalize }}', '{{ object.longitude|unlocalize }}']
+    console.log(`Koordinat ${koordinat}`)
+    //const koordinat = [-0.900077, 131.354]
+    
     function initMap() {
-      const map = L.map('map').setView(koordinatAwal, 13)
+      const map = L.map('map').setView(koordinat, 13)
     
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map)
     
       // Marker Awal
-      L.marker(koordinatAwal).addTo(map).bindPopup('<div class="text-center"><b>{{ object.nama }}</b><br/>{{ object.latitude }},{{ object.longitude }}</div>')
+      L.marker(koordinat).addTo(map).bindPopup('<div class="text-center"><b>{{ object.nama }}</b><br/>{{ object.latitude|unlocalize }},{{ object.longitude|unlocalize }}</div>')
     }
     
     initMap()

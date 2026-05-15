@@ -3,7 +3,8 @@ from django.http import HttpRequest
 from django.contrib.auth.decorators import login_required
 from apps.absah.models import DataAbsahModel
 from apps.bendung.models import BendungModel
-from apps.danau.models import DanauModel
+
+from apps.asets.models import DanauModel
 from apps.embung.models import EmbungModel
 from apps.pengaman_pantai.models import PengamanPantaiModel
 from apps.pengendali_sedimen.models import CheckDamModel
