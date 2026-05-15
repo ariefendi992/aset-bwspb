@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    # "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -41,15 +42,17 @@ INSTALLED_APPS = [
     # APPS
     "apps.akun",
     "apps.core.apps.CoreConfig",
-    "apps.danau",
+    # "apps.asets.apps.AsetsConfig",
+    "apps.asets",
+    # "apps.danau",
     "apps.peta_sebaran",
-    "apps.embung",
-    "apps.bendung",  # Perbaiki bagian admin
-    "apps.pengendali_sedimen",
-    "apps.pengaman_pantai",
-    "apps.tanggul_sungai",
-    "apps.sumur_air_tanah",
-    "apps.absah",
+    # "apps.embung",
+    # "apps.bendung",  # Perbaiki bagian admin
+    # "apps.pengendali_sedimen",
+    # "apps.pengaman_pantai",
+    # "apps.tanggul_sungai",
+    # "apps.sumur_air_tanah",
+    # "apps.absah",
     #
     "apps.dashboard",
 ]
@@ -155,3 +158,18 @@ if DEBUG:
     STATICFILES_DIRS = [BASE_DIR / "static"]
 else:
     STATIC_ROOT = BASE_DIR / "staticfiles"
+
+
+# NOTE: ADDITIONAL TEMPLATE
+JAZZMIN_SETTINGS = {
+    "site_title": "BWSPB",
+    "site_header": "Dashboard Aset",
+    "site_brand": "BWSPB",
+    "topmenu_links": [
+        {"name": "Home", "url": "admin:index"},
+    ],
+    "icons": {
+        "auth": "fas fa-users",
+        "aset": "fas fa-database",
+    },
+}

@@ -128,3 +128,23 @@ class ActivityLogModel(models.Model):
 
     class Meta:
         db_table = "tb_activity"
+
+
+class ProvinsiModel(models.Model):
+    nama_provinsi = models.CharField(max_length=100, blank=True)
+    singkatan = models.CharField(max_length=100, blank=True)
+
+    class Meta:
+        db_table = "tb_provinsi"
+        verbose_name = ("Data Provinsi",)
+        verbose_name_plural = "Provinsi"
+
+
+class KabupatenModel(models.Model):
+    provinsi = models.ForeignKey(ProvinsiModel, on_delete=models.SET_NULL, null=True)
+    nama_kabupaten = models.CharField(max_length=100, blank=True)
+
+    class Meta:
+        db_table = "tb_kabupaten"
+        verbose_name = "Data Kabupaten"
+        verbose_name_plural = "Kabupaten"

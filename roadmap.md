@@ -36,6 +36,8 @@
   ### Checkdam
   - [x] Index
   - [x] Detail
+  - [x] Koordinat 1 
+  - [ ] Koordinat 2 
   - [x] Add
   - [x] Update
   - [x] Delete
@@ -43,6 +45,8 @@
   ### Pengaman Pantai
   - [x] Index
   - [x] Detail
+  - [x] Koordinat 1 
+  - [ ] Koordinat 2 
   - [x] Add
   - [x] Update
   - [x] Delete

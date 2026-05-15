@@ -23,14 +23,15 @@ from django.conf.urls.static import static
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("apps.dashboard.urls")),
-    path("aset-danau/", include("apps.danau.urls")),
-    path("aset-embung/", include("apps.embung.urls")),
-    path("aset-bendung/", include("apps.bendung.urls")),
-    path("aset-pengedali-sedimen/", include("apps.pengendali_sedimen.urls")),
-    path("aset-pengaman-pantai/", include("apps.pengaman_pantai.urls")),
-    path("aset-tanggul-sungai/", include("apps.tanggul_sungai.urls")),
-    path("aset-sumur-air-tanah/", include("apps.sumur_air_tanah.urls")),
-    path("aset-absah/", include("apps.absah.urls")),
+    # path("aset-danau/", include("apps.danau.urls")),
+    path("aset/", include("apps.asets.urls")),
+    # path("aset-embung/", include("apps.embung.urls")),
+    # path("aset-bendung/", include("apps.bendung.urls")),
+    # path("aset-pengedali-sedimen/", include("apps.pengendali_sedimen.urls")),
+    # path("aset-pengaman-pantai/", include("apps.pengaman_pantai.urls")),
+    # path("aset-tanggul-sungai/", include("apps.tanggul_sungai.urls")),
+    # path("aset-sumur-air-tanah/", include("apps.sumur_air_tanah.urls")),
+    # path("aset-absah/", include("apps.absah.urls")),
     # Autentikasi
     path("", include("apps.akun.urls")),
 ]

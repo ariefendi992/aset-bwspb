@@ -1,15 +1,16 @@
 from django.shortcuts import render
 from django.http import HttpRequest
 from django.contrib.auth.decorators import login_required
-from apps.absah.models import DataAbsahModel
-from apps.bendung.models import BendungModel
-
-from apps.asets.models import DanauModel
-from apps.embung.models import EmbungModel
-from apps.pengaman_pantai.models import PengamanPantaiModel
-from apps.pengendali_sedimen.models import CheckDamModel
-from apps.sumur_air_tanah.models import SumurAirTanahModel
-from apps.tanggul_sungai.models import TanggulSungaiModel
+from apps.asets.models import (
+    BendungModel,
+    DanauModel,
+    EmbungModel,
+    CheckDamModel,
+    PengamanPantaiModel,
+    TanggulSungaiModel,
+    SumurAirTanahModel,
+    DataAbsahModel,
+)
 
 
 # Create your views here.

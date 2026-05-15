@@ -13,3 +13,12 @@ geo.py
 xxx
 note.txt
 Inventarisasi Aset SDA PapuaBarat.pdf
+apps/danau/
+apps/embung/
+apps/bendung/
+apps/pengendali_sedimen/
+apps/pengamanan_pantai/
+apps/tanggul_sungai/
+apps/absah/
+
+# Refactory Structur Project
