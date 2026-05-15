@@ -1,6 +1,8 @@
 {% extends 'base_.html' %}
+{% load l10n %}
 {% load static %}
 {% block css %}
+  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
     #map {
@@ -59,8 +61,8 @@
                   <tr>
                     <td>Koordinat</td>
                     <td>
-                      {{ object.latitude }}, {{ object.longitude }}
-                      <input id="koordinatAwal" type="text" hidden value="{{ object.latitude }}, {{ object.longitude }}" />
+                      {{ object.latitude|unlocalize }}, {{ object.longitude|unlocalize }}
+                      <input id="koordinatAwal" type="text" hidden value="{{ object.latitude|unlocalize }}, {{ object.longitude|unlocalize }}" />
                     </td>
                   </tr>
                 </table>
@@ -150,94 +152,68 @@
       </div>
     </section>
   </div>
-  {% comment %} <div class="page-heading">
-    <h3>{{ object.nama }}</h3>
-  </div>
-
-  <div class="row">
-    <!-- LOKASI -->
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-header">
-          <h4>Lokasi</h4>
-        </div>
-        <div class="card-body">
-          <p>{{ object.kecamatan }}</p>
-          <p>{{ object.kabupaten }}</p>
-          <p>{{ object.latitude }}, {{ object.longitude }}</p>
-
-          <div id="map" style="height: 400px;"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- DATA TEKNIS -->
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-header">
-          <h4>Data Teknis</h4>
-        </div>
-        <div class="card-body">
-          <ul class="list-group">
-            <li class="list-group-item">Luas: {{ object.luas_genangan }}</li>
-            <li class="list-group-item">Volume: {{ object.volume }}</li>
-            <li class="list-group-item">Irigasi: {{ object.irigasi }}</li>
-            <li class="list-group-item">Air Baku: {{ object.air_baku }}</li>
-            <li class="list-group-item">Fungsi: {{ object.fungsi }}</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div> {% endcomment %}
 {% endblock %}
 
 {% block js %}
-  {% comment %} <script>
-    let lati = parseFloat('{{ object.latitude }}')
-    let longi = parseFloat('{{ object.longitude }}')
-    console.log(`Lati ===  ${lati}`)
-    async function initMap() {
-      const { Map } = await google.maps.importLibrary('maps')
-      const { AdvancedMarkerElement } = await google.maps.importLibrary('marker')
+  <!-- Leaflet JS -->
+  {% comment %} <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script> {% endcomment %}
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- ESRI Leaflet -->
+  <script src="https://unpkg.com/esri-leaflet"></script>
+
+  <script>
+    const koordinat = [parseFloat('{{ object.latitude|unlocalize }}'), parseFloat('{{ object.longitude|unlocalize }}')]
+    //console.log(`Koordinat ==> ${koordinatAwal}`)
+    function initMap() {
+      const map = L.map('map').setView(koordinat, 13)
     
-      const posisi = {
-        lat: lati,
-        lng: longi
+      // OpenStreetMap
+      const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attrubution: '&copy; OpenStreetMap'
+      })
+    
+      // ESRI Statelite
+      const esriImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri'
+      })
+    
+      //Default Layer
+      esriImagery.addTo(map)
+    
+      // ============
+      // MARKER
+      // ============
+    
+      const marker = L.marker(koordinat).addTo(map).bindPopup(`<b>{{ object.nama }}</b> <br> {{ object.latitude|unlocalize }}, {{ object.longitude|unlocalize }}`)
+    
+      // ========================
+      // KLIK KOORDINAT
+      // ========================
+    
+      map.on('click', function (e) {
+        const lat = e.latlng.lat
+        const lng = e.latlng.lng
+    
+        L.popup().setLatLng(e.latlng).setContent(`Latitude: ${lat}<br>Longitude: ${lng}`).openOn(map)
+    
+        console.log(lat, lng)
+      })
+    
+      const baseMaps = {
+        OpenStreetMap: osm,
+        ESRI: esriImagery
       }
     
-      const map = new Map(document.getElementById('map'), {
-        zoom: 12,
-        center: posisi,
-        mapId: 'ID' // WAJIB
-      })
+      const overlayMaps = {
+        Marker: marker
+      }
     
-      new AdvancedMarkerElement({
-        map: map,
-        position: posisi,
-        title: '{{ object.nama }}'
-      })
-    }
-  </script> {% endcomment %}
-
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script>
-    const koordinatAwal = document.getElementById('koordinatAwal').value.split(',')
-    
-    function initMap() {
-      const map = L.map('map').setView(koordinatAwal, 13)
-    
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map)
-    
-      // Marker Awal
-      L.marker(koordinatAwal).addTo(map).bindPopup('<div class="text-center"><b>{{ object.nama }}</b><br/>{{ object.latitude }},{{ object.longitude }}</div>')
+      L.control.layers(baseMaps, overlayMaps).addTo(map)
     }
     
     initMap()
     
     //initMap()
   </script>
-
-  {% comment %} <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJVJyY0mths9inBpJ4ZAueiNkWvXHaAMk&libraries=marker&callback=initMap" async defer></script> {% endcomment %}
 {% endblock %}
